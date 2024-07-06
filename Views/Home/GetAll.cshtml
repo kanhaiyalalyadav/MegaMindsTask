@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Employee>
+@{
+    ViewData["Title"] = "GetAll";
+}
+@{
+    int i = 0;
+    if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-info" onclick="AddOrEdit(@item.ID)" type="button"><i class="feather-edit"></i>Edit</button>&nbsp;&nbsp;
+                        <button class="btn btn-sm btn-warning" role="alert" onclick="Delete(@item.ID)" type="button"><i class="fa fa-trash" aria-hidden="true"></i>Delete</button>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="5" class="text-center text-danger">No data available</td>
+        </tr>
+    }
+}
+
+
+

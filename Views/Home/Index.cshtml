@@ -1,0 +1,192 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .table-responsive {
+        margin-top: 10px;
+    }
+
+    table thead tr th, tbody tr td {
+        border: 2px solid black
+    }
+</style>
+<h2 class="text-center text-decoration-underline">List of Employee</h2>
+<button class="btn btn-primary" type="button" onclick="AddOrEdit(0)">Add New Record</button>
+<br>
+<div class="table-responsive">
+
+    <table class="table star-student table-hover table-center mb-0 datatable table-striped" id="tblEmp">
+        <thead class="student-thread">
+            <tr>
+                <th>Sr.No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="MyModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLongTitle">Add New Record</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave" disabled>Submit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+            function loadData() {
+                $.post('/Home/GetAll').done(function (result) {
+                    $('#tblEmp tbody').html(result);
+                }).fail(function (xhr) {
+                    alert('error');
+                });
+            }
+            loadData();
+            $("#btnSave").click(function () {
+                Validate();
+                if (confirm('Are You Sure Want To Submit ??')) {
+                    SaveRecord();
+                }
+            });
+            function SaveRecord() {
+                let param = {
+                    ID: $('#ID').val(),
+                    Name: $('#Name').val(),
+                    Email: $('#Email').val(),
+                    PhoneNumber: $('#PhoneNumber').val(),
+                    Address: $('#Address').val(),
+                    State: $('#State').val(),
+                    City: $('#City').val(),
+                    Agree: $('#Agree').val()
+                }
+                $.ajax({
+                    url: '/Home/Save',
+                    type: 'POST',
+                    data: param,
+                    success: function (result) {
+                        alert(result);
+                        $('#MyModal').modal('hide');
+                        loadData();
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+        function AddOrEdit(Id) {
+            let title = Id == '0' ? 'Add New Employee' : 'Edit Employee Information';
+            $('#MyModal').modal('show');
+            $('#myModalLongTitle').text(title);
+            let btntitle = Id == '0' ? 'Save' : 'Update';
+            $('#btnSave').text(btntitle);
+
+            $.ajax({
+                url: '/Home/Edit',
+                type: 'POST', 
+                data: { ID: Id },
+                success: function (response) {
+                    $('#MyModal .modal-body').html(response);
+                    var state = $('#State').val();
+                    HandleCities(state);
+                },
+                error: function (xhr) {
+                    alert('Error loading data');
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+        var cityData = {
+            Gujarat: ["Surat", "Bardoli", "Baroda"],
+            Maharastra: ["Mumbai", "Pune"]
+        };
+        function HandleCities(state) {
+            var cities = cityData[state];
+            $('#City').empty();
+            if (cities && cities.length > 0) {
+                $.each(cities, function (index, city) {
+                    $('#City').append('<option value="' + city + '">' + city + '</option>');
+                });
+            } else {
+                $('#City').append('<option value="">No cities found</option>');
+            }
+        }
+        function Delete(Id){
+            if(confirm("Are You Want To This Item??")){
+                $.post('/Home/Delete', { ID: Id }).done(function (response) {
+                    alert("Deleted Sucessfully");
+                    loadData();
+                }).fail(function (xhr) {
+                    console.log(xhr.responseText)
+                });
+            }
+        }
+    function Validate() {
+        let isValid = true;
+        if ($('#Name').val().trim() === '') {
+        $('#Name').next('.text-danger').text('Name is required.');
+        isValid = false;
+        } else {
+        $('#Name').next('.text-danger').text('');
+        }
+        const email = $('#Email').val().trim();
+        // const emailPattern = ;
+        if (email === '') {
+        $('#Email').next('.text-danger').text('Email is required.');
+        isValid = false;
+        // } else if (!emailPattern.test(email)) {
+        // $('#Email').next('.text-danger').text('Invalid email format.');
+        // isValid = false;
+        } else {
+        $('#Email').next('.text-danger').text('');
+        }
+        if ($('#PhoneNumber').val().trim() === '') {
+        $('#PhoneNumber').next('.text-danger').text('Phone Number is required.');
+        isValid = false;
+         } else {
+        $('#PhoneNumber').next('.text-danger').text('');
+         }
+         if ($('#Address').val().trim() === '') {
+        $('#Address').next('.text-danger').text('Address is required.');
+        isValid = false;
+         } else {
+        $('#Address').next('.text-danger').text('');
+         }
+         if ($('#State').val() === '') {
+        $('#State').next('.text-danger').text('State is required.');
+        isValid = false;
+         } else {
+        $('#State').next('.text-danger').text('');
+         }
+         if ($('#City').val() === '') {
+        $('#City').next('.text-danger').text('City is required.');
+        isValid = false;
+         } else {
+        $('#City').next('.text-danger').text('');
+         }
+         if (!$('#Agree').is(':checked')) {
+        $('#Agree').next('.text-danger').text('You must agree to continue.');
+        isValid = false;
+         } else {
+        $('#Agree').next('.text-danger').text('');
+         }
+
+    return isValid;
+}
+    </script>
+}

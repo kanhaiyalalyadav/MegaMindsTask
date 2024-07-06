@@ -1,0 +1,62 @@
+﻿@model MegaMindsTask.Models.Employee;
+<div class="container">
+    <input type="hidden" asp-for="ID" name="Id" class="form-control" />
+    <span asp-validation-for="ID" class="text-danger"></span>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" type="text"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" type="email"/>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber" class="control-label"></label>
+        <input asp-for="PhoneNumber" id="PhoneNumber" class="form-control" type="text"/>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address" class="control-label"></label>
+        <input asp-for="Address" id="Address" class="form-control" type="text"/>
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="State" class="control-label"></label>
+        <select asp-for="State" class="form-control" >
+            <option>Select State</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Maharastra">Maharastra</option>
+        </select>
+        <span asp-validation-for="State" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City" class="control-label"></label>
+        <select asp-for="City" class="form-control">
+            <option>Select City</option>
+            
+        </select>
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Agree" type="checkbox" value="0"/>
+        <label asp-for="Agree" class="control-label"></label>
+        <span asp-validation-for="Agree" class="text-danger"></span>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#Agree').change(function () {
+            if ($(this).is(':checked')) {
+                $('#btnSave').prop('disabled', false);
+            } else {
+                $('#btnSave').prop('disabled', true);
+            }
+        });
+        $('#State').change(function () {
+            var selectedState = $(this).val();
+            HandleCities(selectedState);
+        });
+    });
+</script>
