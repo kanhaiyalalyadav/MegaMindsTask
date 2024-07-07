@@ -146,7 +146,7 @@
         $('#Name').next('.text-danger').text('');
         }
         const email = $('#Email').val().trim();
-        // const emailPattern = ;
+        // const emailPattern = ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$;
         if (email === '') {
         $('#Email').next('.text-danger').text('Email is required.');
         isValid = false;
