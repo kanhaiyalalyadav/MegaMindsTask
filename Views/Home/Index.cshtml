@@ -59,11 +59,12 @@
             }
             loadData();
             $("#btnSave").click(function () {
-                Validate();
-                if (confirm('Are You Sure Want To Submit ??')) {
-                    SaveRecord();
-                }
-            });
+  if (Validate()) { 
+    if (confirm('Are You Sure Want To Submit ??')) { 
+      SaveRecord(); 
+    }
+  }
+});
             function SaveRecord() {
                 let param = {
                     ID: $('#ID').val(),
