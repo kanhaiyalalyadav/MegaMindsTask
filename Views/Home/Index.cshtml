@@ -59,12 +59,12 @@
             }
             loadData();
             $("#btnSave").click(function () {
-  if (Validate()) { 
-    if (confirm('Are You Sure Want To Submit ??')) { 
-      SaveRecord(); 
-    }
-  }
-});
+               if (Validate()) { 
+                 if (confirm('Are You Sure Want To Submit ??')) { 
+                   SaveRecord(); 
+                   }
+                    }
+             });
             function SaveRecord() {
                 let param = {
                     ID: $('#ID').val(),
@@ -128,7 +128,7 @@
             }
         }
         function Delete(Id){
-            if(confirm("Are You Want To This Item??")){
+            if(confirm("Are You Want To Delete This Item??")){
                 $.post('/Home/Delete', { ID: Id }).done(function (response) {
                     alert("Deleted Sucessfully");
                     loadData();
